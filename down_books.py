@@ -1,15 +1,25 @@
 import os
 
 import requests
+from bs4 import BeautifulSoup
+from pathvalidate import sanitize_filename
 
 
 def check_for_redirect(response):
+    print(response.url, response.history)
     if response.history:
         raise requests.exceptions.HTTPError
 
 
-def download_book(id, number):
-    url = f'https://tululu.org/txt.php?id={id}'  # 32168
+def parsing_book_name(response):
+    soup = BeautifulSoup(response.text, 'lxml')
+    title, *_ = soup.find('h1').text.split('::')
+    book_name = sanitize_filename(title.strip())
+    return book_name
+
+
+def download_book(id, folder='books/'):
+    url = f'https://tululu.org/b{id}'  # 32168
     response = requests.get(url, allow_redirects=True)
     response.raise_for_status()
 
@@ -17,15 +27,22 @@ def download_book(id, number):
 
     if not os.path.exists('books'):
         os.makedirs('books')
-    with open(f'books/{number}.txt', 'wb') as ff:
+
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    book_name = parsing_book_name(response)
+    path_to_file = os.path.join(folder, f'{id}. {book_name}.txt')
+    with open(path_to_file, 'wb') as ff:
         ff.write(response.content)
+    print(path_to_file)
+    return path_to_file
 
 
 def main():
-    for number_book in range(1, 11):
-        id_book = 32168 + number_book
+    for id_book in range(1, 11):
         try:
-            download_book(id_book, number_book)
+            download_book(id_book)
         except requests.exceptions.HTTPError:
             continue
 
