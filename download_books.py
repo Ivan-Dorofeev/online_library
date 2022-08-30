@@ -59,8 +59,8 @@ def main():
     for id_book in range(start_id, end_id):
         try:
             download_book(id_book)
-        except requests.exceptions.HTTPError:
-            continue
+        except requests.exceptions.HTTPError as exc:
+            print("Ошибка: ", exc)
 
 
 if __name__ == '__main__':
