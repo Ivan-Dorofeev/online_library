@@ -4,8 +4,7 @@ from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
 
-def get_title_and_author(response):
-    soup = BeautifulSoup(response.text, 'lxml')
+def get_title_and_author(soup):
     title, author = soup.find('h1').text.split('::')
     book_name = sanitize_filename(title.strip())
     book_author = sanitize_filename(author.strip())
@@ -34,8 +33,7 @@ def download_image(response):
     return img_path
 
 
-def get_comments(response):
-    soup = BeautifulSoup(response.text, 'lxml')
+def get_comments(soup):
     try:
         comments = ''
         for comment in soup.find_all('div', class_='texts'):
@@ -49,9 +47,8 @@ def get_comments(response):
         return comments
 
 
-def get_genre(response):
+def get_genre(soup):
     try:
-        soup = BeautifulSoup(response.text, 'lxml')
         genres = soup.find('span', class_='d_book').find_all('a')
         genre_text = ','.join([genre.text for genre in genres])
         return genre_text
@@ -60,9 +57,11 @@ def get_genre(response):
 
 
 def parse_book_page(response):
-    title, author = get_title_and_author(response)
-    genre = get_genre(response)
-    comments = get_comments(response)
+    soup = BeautifulSoup(response.text, 'lxml')
+
+    title, author = get_title_and_author(soup)
+    genre = get_genre(soup)
+    comments = get_comments(soup)
     return {
         'title': title,
         'author': author,
