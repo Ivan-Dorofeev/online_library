@@ -49,7 +49,8 @@ def get_genre(response):
     try:
         soup = BeautifulSoup(response.text, 'lxml')
         genres = soup.find('span', class_='d_book').find_all('a')
-        return [genre.text for genre in genres]
+        genre_text = ','.join([genre.text for genre in genres])
+        return genre_text
     except AttributeError:
         return "Нет жанра"
 

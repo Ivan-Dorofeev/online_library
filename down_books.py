@@ -28,12 +28,17 @@ def download_book(id_book, folder='books/'):
 
     author_name = parsing_book['author']
     book_name = parsing_book['title']
+    book_genre = parsing_book['genre']
+    book_comments = parsing_book['comments']
+
     path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
     with open(path_to_file, 'wb') as ff:
         ff.write(response.content)
 
     print('Название: ', book_name)
-    print('Автор: ', author_name, end='\n\n')
+    print('Автор: ', author_name)
+    print('Жанр: ', book_genre, end='\n\n')
+    print('Комментарии: ', book_comments, end='\n\n')
     return path_to_file
 
 
