@@ -25,9 +25,6 @@ def download_book(id, folder='books/'):
 
     check_for_redirect(response)
 
-    if not os.path.exists('books'):
-        os.makedirs('books')
-
     if not os.path.exists(folder):
         os.makedirs(folder)
 
