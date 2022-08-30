@@ -1,5 +1,6 @@
 import argparse
 import os
+import time
 
 import requests
 
@@ -61,6 +62,10 @@ def main():
             download_book(id_book)
         except requests.exceptions.HTTPError as exc:
             print("Ошибка: ", exc)
+        except requests.exceptions.ConnectionError as exc:
+            print("Ошибка: ", exc)
+            print('Ожидаем соединение 5 минут')
+            time.sleep(300)
 
 
 if __name__ == '__main__':
