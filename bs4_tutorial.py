@@ -1,8 +1,5 @@
 import os
-import urllib.parse
-from urllib.parse import urljoin, urlsplit, unquote, urlparse
-
-import requests
+from urllib.parse import urljoin, urlsplit, unquote
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
@@ -15,10 +12,10 @@ def get_title_and_author(response):
     return book_name, book_author
 
 
-def download_images():
+def download_images(response):
     soup = BeautifulSoup(response.text, 'lxml')
     path_picture = soup.find('div', class_='bookimage').find('img')['src']
-    picture_url = urljoin(url, path_picture)
+    picture_url = urljoin(response.url, path_picture)
 
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
@@ -33,7 +30,7 @@ def download_images():
     return img_path
 
 
-def get_comments(id_book):
+def get_comments(response):
     soup = BeautifulSoup(response.text, 'lxml')
     try:
         comments = ''
@@ -42,51 +39,28 @@ def get_comments(id_book):
             comments += f'\n{comment_row}'
         if not comments:
             comments = 'Нет комментариев'
-        return id_book, comments
-    except AttributeError as exc:
+        return comments
+    except AttributeError:
         comments = 'Нет комментариев'
-        return id_book, comments
+        return comments
 
 
-def get_genre(id_book):
+def get_genre(response):
     try:
         soup = BeautifulSoup(response.text, 'lxml')
         genres = soup.find('span', class_='d_book').find_all('a')
         return [genre.text for genre in genres]
     except AttributeError:
-        return "Нет книги"
+        return "Нет жанра"
 
 
-def parse_book_page(response, id_book):
+def parse_book_page(response):
     title, author = get_title_and_author(response)
-    genre = get_genre(id_book)
-    comments = get_comments(id_book)
-    image = download_images()
-
-    print({
-        'title': title,
-        'author': author,
-        'genre': genre,
-        'comments': comments,
-        'image': image,
-    }
-    )
+    genre = get_genre(response)
+    comments = get_comments(response)
     return {
         'title': title,
         'author': author,
         'genre': genre,
         'comments': comments,
-        'image': image,
     }
-
-
-for i in range(1, 2):
-    try:
-        url = f'https://tululu.org/b{i}/'
-        response = requests.get(url)
-        response.raise_for_status()
-
-        parse_book_page(response, i)
-
-    except requests.exceptions.HTTPError:
-        print(i, "Нет книги")
