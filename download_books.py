@@ -4,7 +4,7 @@ import time
 
 import requests
 
-from parsing_modules import parse_book_page, download_images
+from parsing_modules import parse_book_page, download_image
 
 
 def check_for_redirect(response):
@@ -22,7 +22,7 @@ def download_book(id_book, folder='books/'):
     if not os.path.exists(folder):
         os.makedirs(folder)
 
-    download_images(response)
+    download_image(response)
 
     parsing_book = parse_book_page(response)
 

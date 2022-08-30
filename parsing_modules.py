@@ -12,7 +12,7 @@ def get_title_and_author(response):
     return book_name, book_author
 
 
-def download_images(response):
+def download_image(response):
     soup = BeautifulSoup(response.text, 'lxml')
     path_picture = soup.find('div', class_='bookimage').find('img')['src']
     picture_url = urljoin(response.url, path_picture)
