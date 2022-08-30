@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from bs4_tutorial import parse_book_page, download_images
+from parsing_modulespy import parse_book_page, download_images
 
 
 def check_for_redirect(response):
