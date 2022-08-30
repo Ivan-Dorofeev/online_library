@@ -3,7 +3,7 @@ import os
 
 import requests
 
-from parsing_modulespy import parse_book_page, download_images
+from parsing_modules import parse_book_page, download_images
 
 
 def check_for_redirect(response):
@@ -46,8 +46,8 @@ def main():
     parser = argparse.ArgumentParser(
         description='Скачиваем книги и выводим информацию по ним'
     )
-    parser.add_argument('start_id', help='Начать с этого номера книги', default=1, type=int)
-    parser.add_argument('end_id', help='Закончить этим номером книги', default=2, type=int)
+    parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
+    parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
     args = parser.parse_args()
 
     start_id = args.start_id
