@@ -12,13 +12,17 @@ def get_title_and_author(response):
     return book_name, book_author
 
 
-def download_image(response):
+def parsing_picture_name(response):
     soup = BeautifulSoup(response.text, 'lxml')
     path_picture = soup.find('div', class_='bookimage').find('img')['src']
     picture_url = urljoin(response.url, path_picture)
-
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
+    return picture_name
+
+
+def download_image(response):
+    picture_name = parsing_picture_name(response)
 
     if not os.path.exists('images'):
         os.makedirs('images')
