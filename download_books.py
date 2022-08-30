@@ -9,7 +9,6 @@ from parsing_modules import parse_book_page, download_images
 
 def check_for_redirect(response):
     if response.url == 'https://tululu.org/':
-        print('Нет книги')
         raise requests.exceptions.HTTPError
 
 
