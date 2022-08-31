@@ -34,12 +34,8 @@ def download_book(id_book, folder='books/'):
     path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
     with open(path_to_file, 'wb') as ff:
         ff.write(response.content)
-
-    print('Название: ', book_name)
-    print('Автор: ', author_name)
-    print('Жанр: ', book_genre, end='\n\n')
-    print('Комментарии: ', book_comments, end='\n\n')
-    return path_to_file
+    return {'book_name': book_name, 'author_name': author_name, 'book_genre': book_genre,
+            'book_comments': book_comments}
 
 
 def main():
@@ -58,7 +54,11 @@ def main():
 
     for id_book in range(start_id, end_id):
         try:
-            download_book(id_book)
+            downloaded_book = download_book(id_book)
+            print('Название: ', downloaded_book['book_name'])
+            print('Автор: ', downloaded_book['author_name'])
+            print('Жанр: ', downloaded_book['book_genre'], end='\n\n')
+            print('Комментарии: ', downloaded_book['book_comments'], end='\n\n')
         except requests.exceptions.HTTPError as exc:
             print("Ошибка: ", exc)
         except requests.exceptions.ConnectionError as exc:
