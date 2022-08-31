@@ -4,7 +4,7 @@ import time
 
 import requests
 
-from parsing_modules import parse_book_page, download_image
+from parsing_modules import parse_book, download_image
 
 
 def check_for_redirect(response):
@@ -24,7 +24,7 @@ def download_book(id_book, folder='books/'):
 
     download_image(response)
 
-    parsed_book = parse_book_page(response)
+    parsed_book = parse_book(response)
 
     author_name = parsed_book['author']
     book_name = parsed_book['title']

@@ -49,7 +49,7 @@ def get_genre(soup):
     return genre_text
 
 
-def parse_book_page(response):
+def parse_book(response):
     soup = BeautifulSoup(response.text, 'lxml')
 
     title, author = get_title_and_author(soup)
