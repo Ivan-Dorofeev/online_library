@@ -24,12 +24,12 @@ def download_book(id_book, folder='books/'):
 
     download_image(response)
 
-    parsing_book = parse_book_page(response)
+    parsed_book = parse_book_page(response)
 
-    author_name = parsing_book['author']
-    book_name = parsing_book['title']
-    book_genre = parsing_book['genre']
-    book_comments = parsing_book['comments']
+    author_name = parsed_book['author']
+    book_name = parsed_book['title']
+    book_genre = parsed_book['genre']
+    book_comments = parsed_book['comments']
 
     path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
     with open(path_to_file, 'wb') as ff:
