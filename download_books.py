@@ -12,17 +12,17 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_book(id_book, book_name, folder='books/'):
-    download_book_url = f'https://tululu.org/txt.php?id={id_book}'
+def download_book(book_id, book_name, folder='books/'):
+    download_book_url = f'https://tululu.org/txt.php?id={book_id}'
     response = requests.get(download_book_url, allow_redirects=True)
     response.raise_for_status()
-    path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
+    path_to_file = os.path.join(folder, f'{book_id}. {book_name}.txt')
     with open(path_to_file, 'w') as book_file:
         book_file.write(response.text)
 
 
-def fetch_book(id_book, folder='books/'):
-    book_url = f'https://tululu.org/b{id_book}'
+def fetch_book(book_id, folder='books/'):
+    book_url = f'https://tululu.org/b{book_id}'
 
     response = requests.get(book_url, allow_redirects=True)
     response.raise_for_status()
@@ -39,7 +39,7 @@ def fetch_book(id_book, folder='books/'):
     book_comments = parsed_book['comments']
 
     download_image(response)
-    download_book(id_book, book_name)
+    download_book(book_id, book_name)
 
     return {'book_name': book_name, 'author_name': author_name, 'book_genres': book_genres,
             'book_comments': book_comments}
@@ -59,9 +59,9 @@ def main():
     if end_id <= start_id:
         end_id = start_id + 1
 
-    for id_book in range(start_id, end_id):
+    for book_id in range(start_id, end_id):
         try:
-            downloaded_book = fetch_book(id_book)
+            downloaded_book = fetch_book(book_id)
             print('Название: ', downloaded_book['book_name'])
             print('Автор: ', downloaded_book['author_name'])
             print('Жанр: ', downloaded_book['book_genres'], end='\n\n')
