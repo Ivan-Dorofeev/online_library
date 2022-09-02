@@ -19,6 +19,8 @@ def download_book(book_id, book_name, folder='books/'):
     }
     response = requests.get(download_book_url, params=uploads, allow_redirects=True)
     response.raise_for_status()
+    check_for_redirect(response)
+
     path_to_file = os.path.join(folder, f'{book_id}. {book_name}.txt')
     with open(path_to_file, 'w') as book_file:
         book_file.write(response.text)
@@ -51,15 +53,17 @@ def fetch_book(book_id, folder='books/'):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Скачиваем книги и выводим информацию по ним'
-    )
-    parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
-    parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
-    args = parser.parse_args()
-
-    start_id = args.start_id
-    end_id = args.end_id
+    # parser = argparse.ArgumentParser(
+    #     description='Скачиваем книги и выводим информацию по ним'
+    # )
+    # parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
+    # parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
+    # args = parser.parse_args()
+    #
+    # start_id = args.start_id
+    # end_id = args.end_id
+    start_id = 10
+    end_id = 11
 
     if end_id <= start_id:
         end_id = start_id + 1
