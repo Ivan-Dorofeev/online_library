@@ -48,10 +48,10 @@ def get_comments(soup):
     return comments
 
 
-def get_genre(soup):
+def get_genres(soup):
     genres = soup.find('span', class_='d_book').find_all('a')
-    genre_text = ','.join([genre.text for genre in genres])
-    return genre_text
+    genres_text = ','.join([genre.text for genre in genres])
+    return genres_text
 
 
 def parse_book(response):
@@ -59,9 +59,9 @@ def parse_book(response):
 
     title, author = get_title_and_author(soup)
     try:
-        genre = get_genre(soup)
+        genres = get_genres(soup)
     except AttributeError:
-        genre = 'Нет комментариев'
+        genres = 'Нет комментариев'
 
     try:
         comments = get_comments(soup)
@@ -71,6 +71,6 @@ def parse_book(response):
     return {
         'title': title,
         'author': author,
-        'genre': genre,
+        'genres': genres,
         'comments': comments,
     }

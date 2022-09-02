@@ -35,28 +35,26 @@ def fetch_book(id_book, folder='books/'):
     parsed_book = parse_book(response)
     author_name = parsed_book['author']
     book_name = parsed_book['title']
-    book_genre = parsed_book['genre']
+    book_genres = parsed_book['genres']
     book_comments = parsed_book['comments']
 
     download_image(response)
     download_book(id_book, book_name)
 
-    return {'book_name': book_name, 'author_name': author_name, 'book_genre': book_genre,
+    return {'book_name': book_name, 'author_name': author_name, 'book_genres': book_genres,
             'book_comments': book_comments}
 
 
 def main():
-    # parser = argparse.ArgumentParser(
-    #     description='Скачиваем книги и выводим информацию по ним'
-    # )
-    # parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
-    # parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
-    # args = parser.parse_args()
-    #
-    # start_id = args.start_id
-    # end_id = args.end_id
-    start_id = 10
-    end_id = 11
+    parser = argparse.ArgumentParser(
+        description='Скачиваем книги и выводим информацию по ним'
+    )
+    parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
+    parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
+    args = parser.parse_args()
+
+    start_id = args.start_id
+    end_id = args.end_id
 
     if end_id <= start_id:
         end_id = start_id + 1
@@ -66,7 +64,7 @@ def main():
             downloaded_book = fetch_book(id_book)
             print('Название: ', downloaded_book['book_name'])
             print('Автор: ', downloaded_book['author_name'])
-            print('Жанр: ', downloaded_book['book_genre'], end='\n\n')
+            print('Жанр: ', downloaded_book['book_genres'], end='\n\n')
             print('Комментарии: ', downloaded_book['book_comments'], end='\n\n')
         except requests.exceptions.HTTPError as exc:
             print("Ошибка: ", exc)
