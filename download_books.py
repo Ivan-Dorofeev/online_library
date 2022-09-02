@@ -12,9 +12,19 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_book(id_book, folder='books/'):
-    url = f'https://tululu.org/b{id_book}'
-    response = requests.get(url, allow_redirects=True)
+def download_book(id_book, book_name, folder='books/'):
+    download_book_url = f'https://tululu.org/txt.php?id={id_book}'
+    response = requests.get(download_book_url, allow_redirects=True)
+    response.raise_for_status()
+    path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
+    with open(path_to_file, 'wb') as book_file:
+        book_file.write(response.content)
+
+
+def fetch_book(id_book, folder='books/'):
+    book_url = f'https://tululu.org/b{id_book}'
+
+    response = requests.get(book_url, allow_redirects=True)
     response.raise_for_status()
 
     check_for_redirect(response)
@@ -22,18 +32,15 @@ def download_book(id_book, folder='books/'):
     if not os.path.exists(folder):
         os.makedirs(folder)
 
-    download_image(response)
-
     parsed_book = parse_book(response)
-
     author_name = parsed_book['author']
     book_name = parsed_book['title']
     book_genre = parsed_book['genre']
     book_comments = parsed_book['comments']
 
-    path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
-    with open(path_to_file, 'wb') as book_file:
-        book_file.write(response.content)
+    download_image(response)
+    download_book(id_book, book_name)
+
     return {'book_name': book_name, 'author_name': author_name, 'book_genre': book_genre,
             'book_comments': book_comments}
 
@@ -54,7 +61,7 @@ def main():
 
     for id_book in range(start_id, end_id):
         try:
-            downloaded_book = download_book(id_book)
+            downloaded_book = fetch_book(id_book)
             print('Название: ', downloaded_book['book_name'])
             print('Автор: ', downloaded_book['author_name'])
             print('Жанр: ', downloaded_book['book_genre'], end='\n\n')
