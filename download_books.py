@@ -13,8 +13,11 @@ def check_for_redirect(response):
 
 
 def download_book(book_id, book_name, folder='books/'):
-    download_book_url = f'https://tululu.org/txt.php?id={book_id}'
-    response = requests.get(download_book_url, allow_redirects=True)
+    download_book_url = f'https://tululu.org/txt.php'
+    uploads = {
+        'id': {book_id}
+    }
+    response = requests.get(download_book_url, allow_redirects=True, params=uploads)
     response.raise_for_status()
     path_to_file = os.path.join(folder, f'{book_id}. {book_name}.txt')
     with open(path_to_file, 'w') as book_file:
