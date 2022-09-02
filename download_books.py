@@ -37,8 +37,10 @@ def fetch_book(book_id, folder='books/'):
     book_name = parsed_book['title']
     book_genres = parsed_book['genres']
     book_comments = parsed_book['comments']
+    picture_name = parsed_book['picture_name']
+    picture_url = parsed_book['picture_url']
 
-    download_image(response)
+    download_image(picture_url, picture_name)
     download_book(book_id, book_name)
 
     return {'book_name': book_name, 'author_name': author_name, 'book_genres': book_genres,

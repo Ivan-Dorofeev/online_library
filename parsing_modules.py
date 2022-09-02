@@ -13,27 +13,25 @@ def get_title_and_author(soup):
     return book_name, book_author
 
 
-def parsing_picture_name(response):
+def parsing_picture_name_and_url(response):
     soup = BeautifulSoup(response.text, 'lxml')
     path_picture = soup.find('div', class_='bookimage').find('img')['src']
     picture_url = urljoin(response.url, path_picture)
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
-    return picture_name, picture_url
+    return picture_name, picture_unq
 
 
-def download_image(response):
-    picture_name, picture_url = parsing_picture_name(response)
-
-    response_img = requests.get(picture_url, allow_redirects=True)
-    response_img.raise_for_status()
+def download_image(picture_url, picture_name):
+    img_response = requests.get(picture_url, allow_redirects=True)
+    img_response.raise_for_status()
 
     if not os.path.exists('images'):
         os.makedirs('images')
 
     img_path = os.path.join('images', picture_name)
     with open(img_path, 'wb') as img_file:
-        img_file.write(response_img.content)
+        img_file.write(img_response.content)
 
     return img_path
 
@@ -68,9 +66,13 @@ def parse_book(response):
     except AttributeError:
         comments = "Нет жанра"
 
+    picture_name, picture_url = parsing_picture_name_and_url(response)
+
     return {
         'title': title,
         'author': author,
         'genres': genres,
         'comments': comments,
+        'picture_name': picture_name,
+        'picture_url': picture_url
     }
