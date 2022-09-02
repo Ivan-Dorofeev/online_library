@@ -1,5 +1,7 @@
 import os
 from urllib.parse import urljoin, urlsplit, unquote
+
+import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
@@ -17,18 +19,21 @@ def parsing_picture_name(response):
     picture_url = urljoin(response.url, path_picture)
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
-    return picture_name
+    return picture_name, picture_url
 
 
 def download_image(response):
-    picture_name = parsing_picture_name(response)
+    picture_name, picture_url = parsing_picture_name(response)
+
+    response_img = requests.get(picture_url, allow_redirects=True)
+    response_img.raise_for_status()
 
     if not os.path.exists('images'):
         os.makedirs('images')
 
     img_path = os.path.join('images', picture_name)
     with open(img_path, 'wb') as img_file:
-        img_file.write(response.content)
+        img_file.write(response_img.content)
 
     return img_path
 
