@@ -32,8 +32,8 @@ def download_book(id_book, folder='books/'):
     book_comments = parsed_book['comments']
 
     path_to_file = os.path.join(folder, f'{id_book}. {book_name}.txt')
-    with open(path_to_file, 'wb') as ff:
-        ff.write(response.content)
+    with open(path_to_file, 'wb') as book_file:
+        book_file.write(response.content)
     return {'book_name': book_name, 'author_name': author_name, 'book_genre': book_genre,
             'book_comments': book_comments}
 

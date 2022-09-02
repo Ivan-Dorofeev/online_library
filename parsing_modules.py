@@ -27,8 +27,8 @@ def download_image(response):
         os.makedirs('images')
 
     img_path = os.path.join('images', picture_name)
-    with open(img_path, 'wb') as ff:
-        ff.write(response.content)
+    with open(img_path, 'wb') as img_file:
+        img_file.write(response.content)
 
     return img_path
 
