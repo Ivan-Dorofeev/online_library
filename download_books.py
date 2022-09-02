@@ -17,7 +17,7 @@ def download_book(book_id, book_name, folder='books/'):
     uploads = {
         'id': {book_id}
     }
-    response = requests.get(download_book_url, allow_redirects=True, params=uploads)
+    response = requests.get(download_book_url, params=uploads, allow_redirects=True)
     response.raise_for_status()
     path_to_file = os.path.join(folder, f'{book_id}. {book_name}.txt')
     with open(path_to_file, 'w') as book_file:

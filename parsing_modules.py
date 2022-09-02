@@ -5,6 +5,8 @@ import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
+from download_books import check_for_redirect
+
 
 def get_title_and_author(soup):
     title, author = soup.find('h1').text.split('::')
@@ -25,6 +27,7 @@ def parsing_picture_name_and_url(response):
 def download_image(picture_url, picture_name):
     img_response = requests.get(picture_url, allow_redirects=True)
     img_response.raise_for_status()
+    check_for_redirect(img_response)
 
     if not os.path.exists('images'):
         os.makedirs('images')
