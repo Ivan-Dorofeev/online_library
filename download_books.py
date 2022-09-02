@@ -53,17 +53,15 @@ def fetch_book(book_id, folder='books/'):
 
 
 def main():
-    # parser = argparse.ArgumentParser(
-    #     description='Скачиваем книги и выводим информацию по ним'
-    # )
-    # parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
-    # parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
-    # args = parser.parse_args()
-    #
-    # start_id = args.start_id
-    # end_id = args.end_id
-    start_id = 10
-    end_id = 11
+    parser = argparse.ArgumentParser(
+        description='Скачиваем книги и выводим информацию по ним'
+    )
+    parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
+    parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
+    args = parser.parse_args()
+
+    start_id = args.start_id
+    end_id = args.end_id
 
     if end_id <= start_id:
         end_id = start_id + 1
