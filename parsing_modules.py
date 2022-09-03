@@ -5,7 +5,10 @@ import requests
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 
-from download_books import check_for_redirect
+
+def check_for_redirect(response):
+    if response.url == 'https://tululu.org/':
+        raise requests.exceptions.HTTPError
 
 
 def get_title_and_author(soup):

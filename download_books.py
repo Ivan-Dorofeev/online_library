@@ -4,12 +4,7 @@ import time
 
 import requests
 
-from parsing_modules import parse_book, download_image
-
-
-def check_for_redirect(response):
-    if response.url == 'https://tululu.org/':
-        raise requests.exceptions.HTTPError
+from parsing_modules import parse_book, download_image, check_for_redirect
 
 
 def download_book(book_id, book_name, folder='books/'):
