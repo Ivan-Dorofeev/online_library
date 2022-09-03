@@ -15,8 +15,7 @@ def get_title_and_author(soup):
     return book_name, book_author
 
 
-def parsing_picture_name_and_url(response):
-    soup = BeautifulSoup(response.text, 'lxml')
+def parsing_picture_name_and_url(response, soup):
     path_picture = soup.find('div', class_='bookimage').find('img')['src']
     picture_url = urljoin(response.url, path_picture)
     picture_unq = unquote(picture_url)
@@ -69,7 +68,7 @@ def parse_book(response):
     except AttributeError:
         comments = "Нет жанра"
 
-    picture_name, picture_url = parsing_picture_name_and_url(response)
+    picture_name, picture_url = parsing_picture_name_and_url(response, soup)
 
     return {
         'title': title,
