@@ -87,13 +87,6 @@ def main():
     skip_txt = args.skip_txt
     json_path = args.json_path
 
-    # start_page = 1
-    # end_page = 1
-    # dest_folder = ''
-    # skip_imgs = ''
-    # skip_txt = ''
-    # json_path = ''
-
     if start_page > 700:
         start_page = 700
     if end_page <= start_page or end_page > 700:
