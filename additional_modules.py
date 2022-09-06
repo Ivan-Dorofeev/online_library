@@ -26,15 +26,16 @@ def parsing_picture_name_and_url(response, soup):
     return picture_name, picture_unq
 
 
-def download_image(picture_url, picture_name):
+def download_image(picture_url, picture_name, dest_folder):
     img_response = requests.get(picture_url, allow_redirects=True)
     img_response.raise_for_status()
     check_for_redirect(img_response)
 
-    if not os.path.exists('images'):
-        os.makedirs('images')
+    folder = os.path.join(dest_folder, 'images') if dest_folder else 'images'
+    if not os.path.exists(folder):
+        os.makedirs(folder)
 
-    img_path = os.path.join('images', picture_name)
+    img_path = os.path.join(folder, picture_name)
     with open(img_path, 'wb') as img_file:
         img_file.write(img_response.content)
 
