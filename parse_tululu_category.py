@@ -14,7 +14,7 @@ def get_max_pages(url):
 
 
 def get_book_links(page):
-    fantastic_books_url = 'https://tululu.org/l55/'
+    fantastic_books_url = urljoin('https://tululu.org/l55/', str(page))
     response = requests.get(fantastic_books_url, allow_redirects=True)
     response.raise_for_status()
 
@@ -30,12 +30,9 @@ def get_book_links(page):
     return book_urls
 
 
-def parse_book_category():
+def parse_book_category(start_page, end_page):
     book_urls = []
-    for page in range(1, 2):
+    for page in range(start_page, end_page + 1):
         book_urls += get_book_links(page)
     return book_urls
 
-
-if __name__ == '__main__':
-    parse_book_category()

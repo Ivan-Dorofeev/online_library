@@ -61,7 +61,22 @@ def main():
     books = {}
     book_count = 0
 
-    book_urls = parse_book_category()
+    parser = argparse.ArgumentParser(
+        description='Скачиваем книги и выводим информацию по ним'
+    )
+    parser.add_argument('--start_page', help='Начать с этой страницы', nargs='?', default=1, type=int)
+    parser.add_argument('--end_page', help='Закончить на этой странице', nargs='?', default=1, type=int)
+    args = parser.parse_args()
+
+    start_page = args.start_page
+    end_page = args.end_page
+
+    if start_page > 700:
+        start_page = 700
+    if end_page <= start_page or end_page > 700:
+        end_page = start_page
+
+    book_urls = parse_book_category(start_page, end_page)
     for book_url in book_urls:
         book_count += 1
         try:
