@@ -1,13 +1,16 @@
 import argparse
+import json
 import os
 import time
+from urllib.parse import urlparse
 
 import requests
 
 from additional_modules import parse_book, download_image, check_for_redirect
+from parse_tululu_category import parse_book_category
 
 
-def download_book(book_id, book_name, folder='books/'):
+def download_book(book_id, book_name, book_count, folder='books/'):
     download_book_url = f'https://tululu.org/txt.php'
     uploads = {
         'id': {book_id}
@@ -16,14 +19,13 @@ def download_book(book_id, book_name, folder='books/'):
     response.raise_for_status()
     check_for_redirect(response)
 
-    path_to_file = os.path.join(folder, f'{book_id}. {book_name}.txt')
+    path_to_file = os.path.join(folder, f'{book_count}. {book_name}.txt')
     with open(path_to_file, 'w') as book_file:
         book_file.write(response.text)
+    return path_to_file
 
 
-def fetch_book(book_id, folder='books/'):
-    book_url = f'https://tululu.org/b{book_id}'
-
+def fetch_book(book_url, book_count, folder='books/'):
     response = requests.get(book_url, allow_redirects=True)
     response.raise_for_status()
 
@@ -40,40 +42,38 @@ def fetch_book(book_id, folder='books/'):
     picture_name = parsed_book['picture_name']
     picture_url = parsed_book['picture_url']
 
-    download_image(picture_url, picture_name)
-    download_book(book_id, book_name)
+    book_id = urlparse(book_url).path.split('/')[1]
+    number_id = book_id[1:]
 
-    return {'book_name': book_name, 'author_name': author_name, 'book_genres': book_genres,
-            'book_comments': book_comments}
+    img_scr = download_image(picture_url, picture_name)
+    book_path = download_book(number_id, book_name, book_count)
+
+    return {'title': book_name, 'author': author_name, 'img_scr': img_scr, 'book_path': book_path,
+            'genres': book_genres, 'comments': book_comments}
+
+
+def write_to_file(books):
+    with open('downloaded_books.json', 'w') as file:
+        json.dump(books, file, ensure_ascii=False)
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Скачиваем книги и выводим информацию по ним'
-    )
-    parser.add_argument('start_id', help='Начать с этого номера книги', nargs='?', default=1, type=int)
-    parser.add_argument('end_id', help='Закончить этим номером книги', nargs='?', default=2, type=int)
-    args = parser.parse_args()
+    books = {}
+    book_count = 0
 
-    start_id = args.start_id
-    end_id = args.end_id
-
-    if end_id <= start_id:
-        end_id = start_id + 1
-
-    for book_id in range(start_id, end_id):
+    book_urls = parse_book_category()
+    for book_url in book_urls:
+        book_count += 1
         try:
-            downloaded_book = fetch_book(book_id)
-            print('Название: ', downloaded_book['book_name'])
-            print('Автор: ', downloaded_book['author_name'])
-            print('Жанр: ', downloaded_book['book_genres'], end='\n\n')
-            print('Комментарии: ', downloaded_book['book_comments'], end='\n\n')
+            downloaded_book = fetch_book(book_url, book_count)
+            books.update(downloaded_book)
         except requests.exceptions.HTTPError as exc:
             print("Ошибка: ", exc)
         except requests.exceptions.ConnectionError as exc:
             print("Ошибка: ", exc)
             print('Ожидаем соединение 5 минут')
             time.sleep(300)
+    write_to_file(books)
 
 
 if __name__ == '__main__':

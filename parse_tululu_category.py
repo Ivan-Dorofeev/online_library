@@ -30,15 +30,12 @@ def get_book_links(page):
     return book_urls
 
 
-def main():
+def parse_book_category():
     book_urls = []
-    # max_pages = get_max_pages('https://tululu.org/l55/')
-
-    for page in range(1, 11):
+    for page in range(1, 2):
         book_urls += get_book_links(page)
-        print(len(book_urls))
-    print(book_urls)
+    return book_urls
 
 
 if __name__ == '__main__':
-    main()
+    parse_book_category()
