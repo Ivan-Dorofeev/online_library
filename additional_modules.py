@@ -12,14 +12,14 @@ def check_for_redirect(response):
 
 
 def get_title_and_author(soup):
-    title, author = soup.find('h1').text.split('::')
+    title, author = soup.select_one('h1').text.split('::')
     book_name = sanitize_filename(title.strip())
     book_author = sanitize_filename(author.strip())
     return book_name, book_author
 
 
 def parsing_picture_name_and_url(response, soup):
-    path_picture = soup.find('div', class_='bookimage').find('img')['src']
+    path_picture = soup.select_one('.bookimage').find('img')['src']
     picture_url = urljoin(response.url, path_picture)
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
@@ -43,7 +43,8 @@ def download_image(picture_url, picture_name):
 
 def get_comments(soup):
     comments = ''
-    for comment in soup.find_all('div', class_='texts'):
+    pars_comments = soup.select('div.text')
+    for comment in pars_comments:
         comment_row = comment.findNext('span', class_='black').text
         comments += f'\n{comment_row}'
     if not comments:
@@ -52,7 +53,7 @@ def get_comments(soup):
 
 
 def get_genres(soup):
-    genres = soup.find('span', class_='d_book').find_all('a')
+    genres = soup.select_one('span.d_book a')
     genres_text = ','.join([genre.text for genre in genres])
     return genres_text
 

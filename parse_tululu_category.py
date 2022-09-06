@@ -9,7 +9,7 @@ def get_max_pages(url):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'lxml')
-    pages = soup.find_all('a', class_='npage')[-1].text
+    pages = soup.select('a.npage')[-1].text
     return int(pages)
 
 
@@ -19,7 +19,7 @@ def get_book_links(page):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'lxml')
-    books_ids = soup.find('td', class_='ow_px_td').find_all('a')
+    books_ids = soup.select('.ow_px_td a')
 
     book_urls = []
     for books_id in books_ids:
