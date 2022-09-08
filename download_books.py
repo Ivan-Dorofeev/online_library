@@ -6,23 +6,8 @@ from urllib.parse import urlparse
 
 import requests
 
-from additional_modules import parse_book, download_image, check_for_redirect
-from parse_tululu_category import parse_book_category
-
-
-def download_book(book_id, book_name, book_count, folder):
-    download_book_url = f'https://tululu.org/txt.php'
-    uploads = {
-        'id': {book_id}
-    }
-    response = requests.get(download_book_url, params=uploads, allow_redirects=True)
-    response.raise_for_status()
-    check_for_redirect(response)
-
-    path_to_file = os.path.join(folder, f'{book_count}. {book_name}.txt')
-    with open(path_to_file, 'w') as book_file:
-        book_file.write(response.text)
-    return path_to_file
+from download_modules import download_image, check_for_redirect, download_book
+from parsing_modules import parse_book_category, parse_book
 
 
 def fetch_book(book_url, book_count, dest_folder, skip_imgs, skip_txt):
@@ -69,30 +54,23 @@ def main():
     books = {}
     book_count = 0
 
-    # parser = argparse.ArgumentParser(
-    #     description='Скачиваем книги и выводим информацию по ним'
-    # )
-    # parser.add_argument('--start_page', help='Начать с этой страницы', nargs='?', default=1, type=int)
-    # parser.add_argument('--end_page', help='Закончить на этой странице', nargs='?', default=1, type=int)
-    # parser.add_argument('--dest_folder', help='Путь к каталогу с результатами парсинга', nargs='?', default='')
-    # parser.add_argument('--skip_imgs', help='Не скачивать картинки', nargs='?', default='')
-    # parser.add_argument('--skip_txt', help='Не скачивать книги', nargs='?', default='')
-    # parser.add_argument('--json_path', help='Указать свой путь к *.json файлу с результатами', nargs='?', default='')
-    # args = parser.parse_args()
-    #
-    # start_page = args.start_page
-    # end_page = args.end_page
-    # dest_folder = args.dest_folder
-    # skip_imgs = args.skip_imgs
-    # skip_txt = args.skip_txt
-    # json_path = args.json_path
+    parser = argparse.ArgumentParser(
+        description='Скачиваем книги и выводим информацию по ним'
+    )
+    parser.add_argument('--start_page', help='Начать с этой страницы', nargs='?', default=1, type=int)
+    parser.add_argument('--end_page', help='Закончить на этой странице', nargs='?', default=1, type=int)
+    parser.add_argument('--dest_folder', help='Путь к каталогу с результатами парсинга', nargs='?', default='')
+    parser.add_argument('--skip_imgs', help='Не скачивать картинки', nargs='?', default='')
+    parser.add_argument('--skip_txt', help='Не скачивать книги', nargs='?', default='')
+    parser.add_argument('--json_path', help='Указать свой путь к *.json файлу с результатами', nargs='?', default='')
+    args = parser.parse_args()
 
-    start_page = 1
-    end_page = 1
-    dest_folder = ''
-    skip_imgs = ''
-    skip_txt = ''
-    json_path = ''
+    start_page = args.start_page
+    end_page = args.end_page
+    dest_folder = args.dest_folder
+    skip_imgs = args.skip_imgs
+    skip_txt = args.skip_txt
+    json_path = args.json_path
 
     if start_page > 700:
         start_page = 700
@@ -105,10 +83,9 @@ def main():
         try:
             downloaded_book = fetch_book(book_url, book_count, dest_folder, skip_imgs, skip_txt)
             books.update(downloaded_book)
-        except requests.exceptions.HTTPError as exc:
-            print("Ошибка: ", exc)
-        except requests.exceptions.ConnectionError as exc:
-            print("Ошибка: ", exc)
+        except requests.exceptions.HTTPError:
+            continue
+        except requests.exceptions.ConnectionError:
             print('Ожидаем соединение 5 минут')
             time.sleep(300)
     write_to_file(books, json_path)

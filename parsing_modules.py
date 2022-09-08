@@ -1,4 +1,4 @@
-import os
+import time
 from urllib.parse import urljoin, urlsplit, unquote
 
 import requests
@@ -24,22 +24,6 @@ def parsing_picture_name_and_url(response, soup):
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
     return picture_name, picture_unq
-
-
-def download_image(picture_url, picture_name, dest_folder):
-    img_response = requests.get(picture_url, allow_redirects=True)
-    img_response.raise_for_status()
-    check_for_redirect(img_response)
-
-    folder = os.path.join(dest_folder, 'images') if dest_folder else 'images'
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-
-    img_path = os.path.join(folder, picture_name)
-    with open(img_path, 'wb') as img_file:
-        img_file.write(img_response.content)
-
-    return img_path
 
 
 def get_comments(soup):
@@ -83,3 +67,45 @@ def parse_book(response):
         'picture_name': picture_name,
         'picture_url': picture_url
     }
+
+
+def get_max_pages(url):
+    response = requests.get(url, allow_redirects=True)
+    response.raise_for_status()
+
+    soup = BeautifulSoup(response.text, 'lxml')
+    pages = soup.select('a.npage')[-1].text
+    return int(pages)
+
+
+def get_book_links(page):
+    fantastic_books_url = 'https://tululu.org/l55/'
+    book_url = urljoin(fantastic_books_url, str(page))
+    response = requests.get(book_url, allow_redirects=False)
+    response.raise_for_status()
+    check_for_redirect(response)
+
+    soup = BeautifulSoup(response.text, 'lxml')
+    books_ids = soup.select('.ow_px_td a')
+
+    book_urls = []
+    for books_id in books_ids:
+        if str(books_id['href']).startswith('/b'):
+            url = urljoin(fantastic_books_url, books_id['href'])
+            if url not in book_urls:
+                book_urls.append(url)
+    return book_urls
+
+
+def parse_book_category(start_page, end_page):
+    book_urls = []
+    for page in range(start_page, end_page + 1):
+        try:
+            book_urls += get_book_links(page)
+        except requests.exceptions.HTTPError:
+            continue
+        except requests.exceptions.ConnectionError:
+            print('Ошибка соединения, ожидаем 5 минут')
+            time.sleep(300)
+            continue
+    return book_urls
