@@ -103,7 +103,7 @@ def parse_book_category(start_page, end_page):
         try:
             book_urls += get_book_links(page)
         except requests.exceptions.HTTPError:
-            continue
+            print('Redirect. Нет книги.')
         except requests.exceptions.ConnectionError:
             print('Ошибка соединения, ожидаем 5 минут')
             time.sleep(300)
