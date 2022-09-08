@@ -19,8 +19,8 @@ def get_title_and_author(soup):
 
 
 def parsing_picture_name_and_url(response, soup):
-    path_picture = soup.select_one('.bookimage').find('img')['src']
-    picture_url = urljoin(response.url, path_picture)
+    picture_path = soup.select_one('.bookimage').find('img')['src']
+    picture_url = urljoin(response.url, picture_path)
     picture_unq = unquote(picture_url)
     *_, picture_name = urlsplit(picture_unq).path.split('/')
     return picture_name, picture_unq
