@@ -1,3 +1,4 @@
+import time
 from urllib.parse import urljoin
 
 import requests
@@ -39,5 +40,9 @@ def parse_book_category(start_page, end_page):
         try:
             book_urls += get_book_links(page)
         except requests.exceptions.HTTPError:
+            continue
+        except requests.exceptions.ConnectionError:
+            print('Ошибка соединения, ожидаем 5 минут')
+            time.sleep(300)
             continue
     return book_urls
