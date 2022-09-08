@@ -15,8 +15,10 @@ def get_max_pages(url):
 
 def get_book_links(page):
     fantastic_books_url = urljoin('https://tululu.org/l55/', str(page))
-    response = requests.get(fantastic_books_url, allow_redirects=True)
+    response = requests.get(fantastic_books_url, allow_redirects=False)
     response.raise_for_status()
+    if response.is_redirect:
+        raise requests.exceptions.HTTPError
 
     soup = BeautifulSoup(response.text, 'lxml')
     books_ids = soup.select('.ow_px_td a')
@@ -33,6 +35,8 @@ def get_book_links(page):
 def parse_book_category(start_page, end_page):
     book_urls = []
     for page in range(start_page, end_page + 1):
-        book_urls += get_book_links(page)
+        try:
+            book_urls += get_book_links(page)
+        except requests.exceptions.HTTPError:
+            continue
     return book_urls
-
