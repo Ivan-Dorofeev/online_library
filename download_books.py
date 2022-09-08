@@ -51,9 +51,9 @@ def fetch_book(book_url, book_count, dest_folder, skip_imgs, skip_txt):
                                                                                                         dest_folder)
 
     book_path = 'Стоит фильтр на книгу' if skip_txt and skip_txt in book_name else download_book(number_id,
-                                                                                                      book_name,
-                                                                                                      book_count,
-                                                                                                      folder)
+                                                                                                 book_name,
+                                                                                                 book_count,
+                                                                                                 folder)
 
     return {'title': book_name, 'author': author_name, 'img_scr': img_scr, 'book_path': book_path,
             'genres': book_genres, 'comments': book_comments}
@@ -69,23 +69,30 @@ def main():
     books = {}
     book_count = 0
 
-    parser = argparse.ArgumentParser(
-        description='Скачиваем книги и выводим информацию по ним'
-    )
-    parser.add_argument('--start_page', help='Начать с этой страницы', nargs='?', default=1, type=int)
-    parser.add_argument('--end_page', help='Закончить на этой странице', nargs='?', default=1, type=int)
-    parser.add_argument('--dest_folder', help='Путь к каталогу с результатами парсинга', nargs='?', default='')
-    parser.add_argument('--skip_imgs', help='Не скачивать картинки', nargs='?', default='')
-    parser.add_argument('--skip_txt', help='Не скачивать книги', nargs='?', default='')
-    parser.add_argument('--json_path', help='Указать свой путь к *.json файлу с результатами', nargs='?', default='')
-    args = parser.parse_args()
+    # parser = argparse.ArgumentParser(
+    #     description='Скачиваем книги и выводим информацию по ним'
+    # )
+    # parser.add_argument('--start_page', help='Начать с этой страницы', nargs='?', default=1, type=int)
+    # parser.add_argument('--end_page', help='Закончить на этой странице', nargs='?', default=1, type=int)
+    # parser.add_argument('--dest_folder', help='Путь к каталогу с результатами парсинга', nargs='?', default='')
+    # parser.add_argument('--skip_imgs', help='Не скачивать картинки', nargs='?', default='')
+    # parser.add_argument('--skip_txt', help='Не скачивать книги', nargs='?', default='')
+    # parser.add_argument('--json_path', help='Указать свой путь к *.json файлу с результатами', nargs='?', default='')
+    # args = parser.parse_args()
+    #
+    # start_page = args.start_page
+    # end_page = args.end_page
+    # dest_folder = args.dest_folder
+    # skip_imgs = args.skip_imgs
+    # skip_txt = args.skip_txt
+    # json_path = args.json_path
 
-    start_page = args.start_page
-    end_page = args.end_page
-    dest_folder = args.dest_folder
-    skip_imgs = args.skip_imgs
-    skip_txt = args.skip_txt
-    json_path = args.json_path
+    start_page = 1
+    end_page = 1
+    dest_folder = ''
+    skip_imgs = ''
+    skip_txt = ''
+    json_path = ''
 
     if start_page > 700:
         start_page = 700

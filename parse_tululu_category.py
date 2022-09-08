@@ -14,8 +14,9 @@ def get_max_pages(url):
 
 
 def get_book_links(page):
-    fantastic_books_url = urljoin('https://tululu.org/l55/', str(page))
-    response = requests.get(fantastic_books_url, allow_redirects=False)
+    fantastic_books_url = 'https://tululu.org/l55/'
+    book_url = urljoin(fantastic_books_url, str(page))
+    response = requests.get(book_url, allow_redirects=False)
     response.raise_for_status()
     if response.is_redirect:
         raise requests.exceptions.HTTPError
@@ -26,7 +27,7 @@ def get_book_links(page):
     book_urls = []
     for books_id in books_ids:
         if str(books_id['href']).startswith('/b'):
-            url = urljoin('https://tululu.org', books_id['href'])
+            url = urljoin(fantastic_books_url, books_id['href'])
             if url not in book_urls:
                 book_urls.append(url)
     return book_urls
