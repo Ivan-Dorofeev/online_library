@@ -31,14 +31,15 @@ def fetch_book(book_url, book_count, dest_folder, skip_imgs, skip_txt):
     book_id = urlparse(book_url).path.split('/')[1]
     number_id = book_id[1:]
 
-    img_scr = 'Стоит фильтр на картинку' if skip_imgs and skip_imgs in picture_name else download_image(picture_url,
-                                                                                                        picture_name,
-                                                                                                        dest_folder)
+    if skip_imgs and skip_imgs in picture_name:
+        img_scr = 'Стоит фильтр на картинку'
+    else:
+        img_scr = download_image(picture_url, picture_name, dest_folder)
 
-    book_path = 'Стоит фильтр на книгу' if skip_txt and skip_txt in book_name else download_book(number_id,
-                                                                                                 book_name,
-                                                                                                 book_count,
-                                                                                                 folder)
+    if skip_txt and skip_txt in book_name:
+        book_path = 'Стоит фильтр на книгу'
+    else:
+        book_path = download_book(number_id, book_name, book_count, folder)
 
     return {'title': book_name, 'author': author_name, 'img_scr': img_scr, 'book_path': book_path,
             'genres': book_genres, 'comments': book_comments}
