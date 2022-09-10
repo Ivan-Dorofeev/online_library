@@ -52,7 +52,7 @@ def write_to_file(books, json_path):
 
 
 def main():
-    books = {}
+    books = []
     book_count = 0
 
     parser = argparse.ArgumentParser(
@@ -83,7 +83,7 @@ def main():
         book_count += 1
         try:
             downloaded_book = fetch_book(book_url, book_count, dest_folder, skip_imgs, skip_txt)
-            books.update(downloaded_book)
+            books.append(downloaded_book)
         except requests.exceptions.HTTPError:
             continue
         except requests.exceptions.ConnectionError:
