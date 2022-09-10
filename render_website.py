@@ -1,21 +1,28 @@
 import json
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from jinja2 import Environment, FileSystemLoader, select_autoescape
+from livereload import Server
 
-env = Environment(
-    loader=FileSystemLoader('.'),
-    autoescape=select_autoescape(['html', 'xml'])
-)
 
-template = env.get_template('template.html')
+def rebuild():
+    env = Environment(
+        loader=FileSystemLoader('.'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
 
-with open("downloaded_books.json", "r") as file:
-    books_json = file.read()
-books = json.loads(books_json)
+    template = env.get_template('template.html')
 
-rendered_page = template.render(books=books)
-with open('index.html', 'w', encoding="utf8") as file:
-    file.write(rendered_page)
+    with open("downloaded_books.json", "r") as file:
+        books_json = file.read()
+    books = json.loads(books_json)
 
-server = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-server.serve_forever()
+    rendered_page = template.render(books=books)
+    with open('index.html', 'w', encoding="utf8") as file:
+        file.write(rendered_page)
+    print("Site rebuilt")
+
+
+rebuild()
+server = Server()
+server.watch('template.html', rebuild)
+server.serve(root='/home/axxel/PycharmProjects/Devman/online_library')
