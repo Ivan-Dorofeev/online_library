@@ -1,4 +1,5 @@
 import json
+import os.path
 from pprint import pprint
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
@@ -17,14 +18,18 @@ def rebuild():
     with open("downloaded_books.json", "r") as file:
         books_json = file.read()
     json_books = json.loads(books_json)
-    books = list(chunked(json_books, 2))
-    pprint(books)
-    print(books[0][0])
-    print(books[0][1])
 
-    rendered_page = template.render(books=books)
-    with open('index.html', 'w', encoding="utf8") as file:
-        file.write(rendered_page)
+    if not os.path.exists('pages'):
+        os.makedirs('pages')
+
+    books_by_ten = list(chunked(json_books, 10))
+    for page_number, ten_books in enumerate(books_by_ten, 1):
+        books_by_two = list(chunked(ten_books, 2))
+        rendered_page = template.render(books=books_by_two)
+        path = os.path.join('pages', f'index{page_number}.html')
+        with open(path, 'w', encoding="utf8") as file:
+            file.write(rendered_page)
+
     print("Site rebuilt")
 
 
