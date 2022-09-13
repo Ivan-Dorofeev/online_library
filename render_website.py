@@ -23,9 +23,11 @@ def rebuild():
         os.makedirs('pages')
 
     books_by_ten = list(chunked(json_books, 10))
+    pages_count = list(range(1, len(books_by_ten) + 1))
+
     for page_number, ten_books in enumerate(books_by_ten, 1):
         books_by_two = list(chunked(ten_books, 2))
-        rendered_page = template.render(books=books_by_two)
+        rendered_page = template.render(books=books_by_two, pages=pages_count, current_page=page_number)
         path = os.path.join('pages', f'index{page_number}.html')
         with open(path, 'w', encoding="utf8") as file:
             file.write(rendered_page)
