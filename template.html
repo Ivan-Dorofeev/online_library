@@ -41,8 +41,10 @@
               <div class="col-sm" style="border: double ; margin: 5px">
                 <img style="padding: 5px; " src="{{ book.img_scr|urlencode }}" alt="{{ book.title }}" width="40" height="40">
                 <div style="display: inline-block">
-                  <h3>{{book.title}}</h3>
-                  <p>{{book.author}}</p>
+                  <h4>{{book.title}}</h4>
+                  <h6>{{book.author}}</h6>
+                  <h7>{{book.genres}}</h7>
+                  <hr>
                   <a href="{{ book.book_path|urlencode }}" target="_blank">Читать</a>
                 </div>
               </div>
