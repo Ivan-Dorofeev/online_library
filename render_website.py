@@ -27,7 +27,8 @@ def rebuild():
 
     for page_number, ten_books in enumerate(books_by_ten, 1):
         books_by_two = list(chunked(ten_books, 2))
-        rendered_page = template.render(books=books_by_two, pages=pages_count, current_page=page_number)
+        rendered_page = template.render(books=books_by_two, pages=pages_count, current_page=page_number,
+                                        last_page=len(books_by_ten))
         path = os.path.join('pages', f'index{page_number}.html')
         with open(path, 'w', encoding="utf8") as file:
             file.write(rendered_page)

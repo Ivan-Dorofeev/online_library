@@ -14,12 +14,25 @@
     <h1>Hello, книги!</h1>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>
+          {% if current_page==1 %}
+             <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Назад</a></li>
+          {% else %}
+             <li class="page-item"><a class="page-link" href="index{{current_page-1}}.html" >Назад</a></li>
+          {% endif %}
+
           {% for page in pages %}
-            <li class="page-item"><a class="page-link" href="index{{page}}.html">{{page}}</a></li>
+            {% if page==current_page %}
+              <li class="page-item active"><a class="page-link" href="index{{page}}.html">{{page}}</a></li>
+            {% else %}
+              <li class="page-item"><a class="page-link" href="index{{page}}.html">{{page}}</a></li>
+            {% endif %}
           {% endfor %}
-          <li class="page-item"><a class="page-link" href="#">Next</a></li>
+
+          {% if current_page==last_page %}
+             <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Вперёд</a></li>
+          {% else %}
+             <li class="page-item"><a class="page-link" href="index{{current_page+1}}.html">Вперёд</a></li>
+          {% endif %}
       </ul>
     </nav>
     <div class="container">
