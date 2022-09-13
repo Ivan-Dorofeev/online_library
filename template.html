@@ -12,15 +12,22 @@
   </head>
   <body>
     <h1>Hello, книги!</h1>
-    {% for book in books %}
-          <div style="display: block">
-            <img src="{{ book.img_scr|urlencode }}" alt="{{ book.title }}">
-            <div style="display: inline-block">
-              <h3>{{book.title}}</h3>
-              <p>{{book.author}}</p>
-            </div>
+    <div class="container">
+      {% for two_books in books %}
+          <div class="row">
+            {% for book in two_books %}
+              <div class="col-sm">
+                <img src="{{ book.img_scr|urlencode }}" alt="{{ book.title }}">
+                <div style="display: inline-block">
+                  <h3>{{book.title}}</h3>
+                  <p>{{book.author}}</p>
+                </div>
+              </div>
+            {% endfor %}
           </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
+
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
