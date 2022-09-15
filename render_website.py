@@ -1,6 +1,5 @@
 import json
 import os.path
-from pprint import pprint
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from livereload import Server
@@ -31,10 +30,15 @@ def rebuild():
         path = os.path.join('pages', f'index{page_number}.html')
         with open(path, 'w', encoding="utf8") as file:
             file.write(rendered_page)
-    print("Site rebuilt")
+    return "Site rebuilt"
 
 
-rebuild()
-server = Server()
-server.watch('template.html', rebuild)
-server.serve(root='/home/axxel/PycharmProjects/Devman/online_library')
+def main():
+    print(rebuild())
+    server = Server()
+    server.watch('template.html', rebuild)
+    server.serve(root='/home/axxel/PycharmProjects/Devman/online_library')
+
+
+if __name__ == '__main__':
+    main()
