@@ -22,13 +22,14 @@ def rebuild():
     if not os.path.exists('pages'):
         os.makedirs('pages')
 
-    books_by_ten = list(chunked(json_books, 10))
-    pages_count = list(range(1, len(books_by_ten) + 1))
+    books_on_page = 10
+    books_part = list(chunked(json_books, books_on_page))
+    pages_count = list(range(1, len(books_part) + 1))
 
-    for page_number, ten_books in enumerate(books_by_ten, 1):
-        books_by_two = list(chunked(ten_books, 2))
-        rendered_page = template.render(books=books_by_two, pages=pages_count, current_page=page_number,
-                                        last_page=len(books_by_ten))
+    for page_number, ten_books in enumerate(books_part, 1):
+        books_in_row = list(chunked(ten_books, 2))
+        rendered_page = template.render(books=books_in_row, pages=pages_count, current_page=page_number,
+                                        last_page=len(books_part))
         path = os.path.join('pages', f'index{page_number}.html')
         with open(path, 'w', encoding="utf8") as file:
             file.write(rendered_page)
