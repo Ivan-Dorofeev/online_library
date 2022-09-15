@@ -16,8 +16,7 @@ def rebuild():
     template = env.get_template('template.html')
 
     with open("downloaded_books.json", "r") as file:
-        books_json = file.read()
-    json_books = json.loads(books_json)
+        json_books = json.load(file)
 
     if not os.path.exists('pages'):
         os.makedirs('pages')
