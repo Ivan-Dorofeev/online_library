@@ -18,8 +18,7 @@ def rebuild():
     with open("downloaded_books.json", "r") as file:
         json_books = json.load(file)
 
-    if not os.path.exists('pages'):
-        os.makedirs('pages')
+    os.makedirs('pages', exist_ok=True)
 
     books_on_page = 10
     books_part = list(chunked(json_books, books_on_page))
