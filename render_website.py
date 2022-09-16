@@ -17,7 +17,7 @@ def rebuild():
     with open("downloaded_books.json", "r") as file:
         json_books = json.load(file)
 
-    os.makedirs('docs', exist_ok=True)
+    os.makedirs('pages', exist_ok=True)
 
     books_on_page = 10
     books_part = list(chunked(json_books, books_on_page))
@@ -27,7 +27,7 @@ def rebuild():
         books_in_row = list(chunked(ten_books, 2))
         rendered_page = template.render(books=books_in_row, pages=pages_numbers, current_page=page_number,
                                         last_page=len(books_part))
-        path = os.path.join('docs', f'index{page_number}.html')
+        path = os.path.join('pages', f'index{page_number}.html')
         with open(path, 'w', encoding="utf8") as file:
             file.write(rendered_page)
     return "Site rebuilt"
