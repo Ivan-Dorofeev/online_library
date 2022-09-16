@@ -2,7 +2,7 @@
 
 Скрипт скачивает книги из онлайн библиотеки: https://tululu.org, создаёт удобный оффлайн сайт для их чтения.
 
-Ссылка: https://ivan-dorofeev.github.io/parsing_online_library/
+Ссылка на демо-версию: https://ivan-dorofeev.github.io/parsing_online_library/
 
 ### Описание
 Все книги скачиваются в папку ```"/books"``` .
