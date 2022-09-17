@@ -2,7 +2,10 @@
 
 Скрипт скачивает книги из онлайн библиотеки: https://tululu.org, создаёт удобный оффлайн сайт для их чтения.
 
-Ссылка на демо-версию: https://ivan-dorofeev.github.io/parsing_online_library/
+Вот так выглядит [сайт-демострация](https://ivan-dorofeev.github.io/parsing_online_library/)
+
+![image](https://user-images.githubusercontent.com/58893102/189878217-03c79eca-506e-450d-8849-e61a41d2788c.png)
+
 
 ### Описание
 Все книги скачиваются в папку ```"/books"``` .
@@ -44,12 +47,3 @@
 
 ```--json_path``` - Указать свой путь к *.json файлу с результатами
 
-После этого запустите сайт со скачанными книгами:
-
-```python render_website.py```
-    
-Теперь зайдите в папку ```pages/``` и откройте любую страницу.
-
-Получите вот такую страничку:
-
-![image](https://user-images.githubusercontent.com/58893102/189878217-03c79eca-506e-450d-8849-e61a41d2788c.png)
