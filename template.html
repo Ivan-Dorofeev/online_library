@@ -39,9 +39,9 @@
       {% for two_books in books %}
           <div class="row">
             {% for book in two_books %}
-              <div class="col-sm" style="border: double ; margin: 5px; display: block">
+              <div class="col-sm" style="border: double ; margin: 5px; display: inline-flex;">
                 <img style="padding: 5px; display: inline-block" src="../{{ book.img_scr|urlencode }}" alt="{{ book.title }}" width="200" height="300">
-                <div style="display: inline-block; text-align-all: left">
+                <div style="margin: 30px; text-align-all: left">
                   <p5>{{book.title}}</p5>
                   <p6>{{book.author}}</p6>
                   <p7>{{book.genres}}</p7>
