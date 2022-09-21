@@ -46,7 +46,7 @@
                   <p6>{{book.author}}</p6>
                   <p7>{{book.genres}}</p7>
                     <hr>
-                  <a href="{{ book.book_path|urlencode }}" target="_blank">Читать</a>
+                  <a href="../{{ book.book_path|urlencode }}" target="_blank">Читать</a>
                 </div>
               </div>
             {% endfor %}
