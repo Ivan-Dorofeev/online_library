@@ -41,10 +41,10 @@
             {% for book in two_books %}
               <div class="col-sm" style="border: double ; margin: 5px; display: inline-flex; width: 600px; height: 300px">
                 <img style="padding-block: 20px; width: 200px; height: 300px" src="../{{ book.img_scr|urlencode }}" alt="{{ book.title }}">
-                <div style="margin: 30px; text-align-all: left">
-                  <p5>{{book.title}}</p5>
-                  <p6>{{book.author}}</p6>
-                  <p7>{{book.genres}}</p7>
+                <div style="margin: 30px; flex-direction: column">
+                  <h5>{{book.title}}</h5>
+                  <h6>{{book.author}}</h6>
+                  <h7>{{book.genres}}</h7>
                     <hr>
                   <a href="../{{ book.book_path|urlencode }}" target="_blank">Читать</a>
                 </div>
